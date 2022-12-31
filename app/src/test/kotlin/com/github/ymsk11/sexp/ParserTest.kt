@@ -13,6 +13,7 @@ class ParserTest {
             "(1)" to Cell(Atom("1"), Nil),
             "(1 2)" to Cell(Atom("1"), Cell(Atom("2"), Nil)),
             "(1 2 3)" to Cell(Atom("1"), Cell(Atom("2"), Cell(Atom("3"), Nil))),
+            "((1))" to Cell(Cell(Atom("1"), Nil), Nil)
         )
         testCases.forEach { (input, expect) ->
             assertThat(sut(input)).isEqualTo(expect)
