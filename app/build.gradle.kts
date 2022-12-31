@@ -23,7 +23,6 @@ repositories {
 
 dependencies {
     // This dependency is used by the application.
-    implementation("com.google.guava:guava:31.1-jre")
 }
 
 testing {
@@ -36,6 +35,7 @@ testing {
             dependencies {
                 // Use newer version of JUnit Engine for Kotlin Test
                 implementation("org.junit.jupiter:junit-jupiter-engine:5.9.1")
+                implementation("com.google.truth:truth:1.1.3")
             }
         }
     }
