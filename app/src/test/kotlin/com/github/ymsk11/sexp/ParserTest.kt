@@ -8,7 +8,8 @@ class ParserTest {
     @Test
     fun parseTest() {
         val testCases = mapOf(
-            "a" to Atom("a")
+            "a" to Atom("a"),
+            "nil" to Nil,
         )
         testCases.forEach { (input, expect) ->
             assertThat(sut(input)).isEqualTo(expect)
