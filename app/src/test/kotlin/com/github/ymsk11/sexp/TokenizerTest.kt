@@ -19,6 +19,8 @@ class TokenizerTest {
                 Token.RParen,
                 Token.RParen
             ),
+            "nil" to listOf(Token.Nil),
+            "(nil)" to listOf(Token.LParen, Token.Nil, Token.RParen)
         )
         testCases.forEach { (input, expect) ->
             assertThat(sut(input)).isEqualTo(expect)
