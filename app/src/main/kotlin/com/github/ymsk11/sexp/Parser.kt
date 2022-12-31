@@ -9,16 +9,23 @@ class Parser(
     }
 
     operator fun invoke(tokens: List<Token>): Sexp {
-        if (tokens.size > 1) {
-            val token = tokens.filterNot { it == Token.RParen || it == Token.LParen }
-            return Cell(invoke(token), Nil)
-        } else {
-            val token = tokens[0]
-            return when (token) {
+        if (tokens.isEmpty()) return Nil
+        if (tokens.size == 1) {
+            return when (val token = tokens.first()) {
                 Token.Nil -> Nil
                 is Token.Symbol -> Atom(token.value)
                 else -> Nil
             }
+        }
+
+        val token = tokens.filterNot { it == Token.RParen || it == Token.LParen }
+        val car = token.first()
+        val cdr = token.subList(1, token.size)
+
+        if (cdr.isNotEmpty()) {
+            return Cell(invoke(listOf(car)), Cell(invoke(cdr), Nil))
+        } else {
+            return Cell(invoke(listOf(car)), Nil)
         }
     }
 }

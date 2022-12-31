@@ -10,7 +10,8 @@ class ParserTest {
         val testCases = mapOf(
             "a" to Atom("a"),
             "nil" to Nil,
-            "(1)" to Cell(Atom("1"), Nil)
+            "(1)" to Cell(Atom("1"), Nil),
+            "(1 2)" to Cell(Atom("1"), Cell(Atom("2"), Nil))
         )
         testCases.forEach { (input, expect) ->
             assertThat(sut(input)).isEqualTo(expect)
