@@ -1,11 +1,14 @@
 package com.github.ymsk11.sexp
 
-class Parser {
+class Parser(
+    private val tokenizer: Tokenizer = Tokenizer()
+) {
     operator fun invoke(text: String): Sexp {
-        return if (text == "nil") {
-            Nil
-        } else {
-            Atom(text)
+        val token = tokenizer(text)[0]
+        return when (token) {
+            Token.Nil -> Nil
+            is Token.Symbol -> Atom(token.value)
+            else -> Nil
         }
     }
 }
