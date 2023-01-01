@@ -1,10 +1,17 @@
 package com.github.ymsk11.sexp
 
 sealed interface Token {
-    object LParen : Token
-    object RParen : Token
+    object LParen : Token {
+        override fun toString(): String = "Token.("
+    }
+    object RParen : Token {
+        override fun toString(): String = "Token.)"
+    }
 
-    object Nil : Token
+    object Nil : Token {
+        override fun toString(): String = "Token.Nil"
+    }
+
     @JvmInline
     value class Symbol(val value: String) : Token
 
