@@ -14,41 +14,18 @@ class Parser(
         else -> Nil // TODO: throw error
     }
     private fun parse(tokens: List<Token>): Sexp {
+        println("TTT $tokens")
         if (tokens.isEmpty()) return Nil
         if (tokens.size == 1) {
             return parse(tokens.first())
         }
 
-        // 左右のLParen, RParenを取り除く
-        val tokens = tokens.filterIndexed { index, token ->
-            ((index == 0 && token == Token.LParen) || (index == tokens.lastIndex && token == Token.RParen)).not()
-        }
+        val tokens = tokens.removeParen()
 
-        var car: List<Token>
-        var cdr: List<Token>
-        if (tokens.first() == Token.LParen) {
-            // 一番最初がLParenだったら、Car部分までを取り出す
-            var nestCount = 0
-            var carLastIndex = 0
-            tokens.forEachIndexed { index, token ->
-                when (token) {
-                    Token.LParen -> nestCount++
-                    Token.RParen -> {
-                        nestCount--
-                        if (nestCount == 0) {
-                            carLastIndex = index
-                            return@forEachIndexed
-                        }
-                    }
-                    else -> {}
-                }
-            }
-            car = tokens.subList(0, carLastIndex)
-            cdr = tokens.subList(carLastIndex, tokens.lastIndex)
-        } else {
-            car = listOf(tokens.first())
-            cdr = tokens.subList(1, tokens.size)
-        }
+        val (car, cdr) = tokens.split()
+
+        println("CAR $car")
+        println("CDR $cdr")
 
         val cdrCell = if (cdr.isNotEmpty()) {
             when (val s = parse(cdr)) {
@@ -60,5 +37,36 @@ class Parser(
         }
 
         return Cell(parse(car), cdrCell)
+    }
+
+    private fun List<Token>.removeParen() = this.filterIndexed { index, token ->
+        ((index == 0 && token == Token.LParen) || (index == this.lastIndex && token == Token.RParen)).not()
+    }
+
+    private fun List<Token>.split() = if (this.first() == Token.LParen) {
+        var nestCount = 0
+        var carLastIndex = 0
+        this.forEachIndexed { index, token ->
+            when (token) {
+                Token.LParen -> nestCount++
+                Token.RParen -> {
+                    nestCount--
+                    if (nestCount == 0) {
+                        carLastIndex = index
+                        return@forEachIndexed
+                    }
+                }
+                else -> {}
+            }
+        }
+        Pair(
+            this.subList(0, carLastIndex),
+            this.subList(carLastIndex, this.lastIndex)
+        )
+    } else {
+        Pair(
+            listOf(this.first()),
+            this.subList(1, this.size)
+        )
     }
 }

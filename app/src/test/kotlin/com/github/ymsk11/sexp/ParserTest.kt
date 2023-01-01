@@ -18,6 +18,9 @@ class ParserTest {
             "(1 (2) (3))" to Cell(Atom("1"), Cell(Cell(Atom("2"), Nil), Cell(Cell(Atom("3"), Nil), Nil)))
         )
         testCases.forEach { (input, expect) ->
+            println("TESTCASE".repeat(10))
+            println("input $input")
+            println("expect $expect")
             assertThat(sut(input)).isEqualTo(expect)
         }
     }

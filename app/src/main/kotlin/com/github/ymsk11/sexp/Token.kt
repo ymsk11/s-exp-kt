@@ -2,10 +2,10 @@ package com.github.ymsk11.sexp
 
 sealed interface Token {
     object LParen : Token {
-        override fun toString(): String = "Token.("
+        override fun toString(): String = "Token.LParen"
     }
     object RParen : Token {
-        override fun toString(): String = "Token.)"
+        override fun toString(): String = "Token.RParen"
     }
 
     object Nil : Token {
