@@ -19,47 +19,28 @@ class Parser(
         if (tokens.isEmpty()) return Nil
         if (tokens.size == 1) return parse(tokens.first())
         if (tokens.size == 2 && tokens.first() == Token.LParen && tokens.last() == Token.RParen) return Nil
-        if (tokens.size == 2) throw IllegalArgumentException("括弧の対応がおかしい")
+        if (tokens.size == 2) throw IllegalArgumentException("括弧で囲われていない")
 
         val parenCorresponding = checkParenCorresponding(tokens)
         if (parenCorresponding[0] != tokens.lastIndex) {
             throw IllegalArgumentException("括弧で囲われていない")
         }
 
-        val (car, cdr) = if (parenCorresponding.containsKey(1)) {
-            val carRParenIndex = parenCorresponding[1]!!
-            val car = tokens.subList(1, carRParenIndex + 1)
-            val cdr: List<Token> = try {
-                listOf(Token.LParen) + tokens.subList(carRParenIndex + 1, tokens.lastIndex) + listOf(Token.RParen)
-            } catch (e: IndexOutOfBoundsException) {
-                emptyList()
-            }
+        val (car, cdr) = if (parenCorresponding[1] != null) {
+            // Car部分がCellの場合
             Pair(
-                car,
-                cdr,
+                tokens.subList(1, parenCorresponding[1]!! + 1),
+                tokens.subList(parenCorresponding[1]!! + 1, tokens.lastIndex)
             )
         } else {
-            val cdr: List<Token> = try {
-                listOf(Token.LParen) + tokens.subList(2, tokens.lastIndex) + listOf(Token.RParen)
-            } catch (e: IndexOutOfBoundsException) {
-                emptyList()
-            }
+            // Car部分がAtomの場合
             Pair(
                 listOf(tokens[1]),
-                cdr
+                tokens.subList(2, tokens.lastIndex)
             )
         }
 
-        val cdrCell = if (cdr.isNotEmpty()) {
-            when (val s = parse(cdr)) {
-                is Atom -> Cell(s, Nil)
-                else -> s
-            }
-        } else {
-            Nil
-        }
-
-        return Cell(parse(car), cdrCell)
+        return Cell(parse(car), parse(listOf(Token.LParen) + cdr + listOf(Token.RParen)))
     }
 
     fun checkParenCorresponding(tokens: List<Token>): Map<Int, Int> {
