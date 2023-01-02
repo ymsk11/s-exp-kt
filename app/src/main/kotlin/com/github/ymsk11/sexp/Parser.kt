@@ -85,4 +85,20 @@ class Parser(
             this.drop(1)
         )
     }
+
+    fun checkParenCorresponding(tokens: List<Token>): Map<Int, Int> {
+        val list = mutableListOf<Int>()
+        val ret = mutableMapOf<Int, Int>()
+        tokens.forEachIndexed { index, token ->
+            when (token) {
+                Token.LParen -> list.add(index)
+                Token.RParen -> {
+                    ret[list.last()] = index
+                    list.removeAt(list.lastIndex)
+                }
+                else -> {}
+            }
+        }
+        return ret
+    }
 }
