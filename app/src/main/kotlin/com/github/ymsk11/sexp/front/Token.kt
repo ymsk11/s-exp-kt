@@ -1,4 +1,4 @@
-package com.github.ymsk11.sexp
+package com.github.ymsk11.sexp.front
 
 sealed interface Token {
     object LParen : Token {

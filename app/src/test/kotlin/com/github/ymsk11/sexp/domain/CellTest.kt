@@ -1,4 +1,4 @@
-package com.github.ymsk11.sexp
+package com.github.ymsk11.sexp.domain
 
 import org.junit.jupiter.api.Test
 
