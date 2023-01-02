@@ -17,9 +17,8 @@ class Parser(
     }
     private fun parse(tokens: List<Token>): Sexp {
         if (tokens.isEmpty()) return Nil
-        if (tokens.size == 1) {
-            return parse(tokens.first())
-        }
+        if (tokens.size == 2 && tokens.first() == Token.LParen && tokens.last() == Token.RParen) return Nil
+        if (tokens.size == 1) return parse(tokens.first())
 
         var nestCount = 0
         var canRemoveParen = true
@@ -40,8 +39,6 @@ class Parser(
         } else {
             tokens
         }
-
-        if (tokens.isEmpty()) return Nil
 
         val (car, cdr) = tokens.split()
 
