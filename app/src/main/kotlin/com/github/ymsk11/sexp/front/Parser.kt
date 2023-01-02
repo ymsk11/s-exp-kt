@@ -30,21 +30,27 @@ class Parser(
             throw IllegalArgumentException("括弧で囲われていない")
         }
 
-        val (car, cdr) = if (parenCorresponding[1] != null) {
-            // Car部分がCellの場合
-            Pair(
-                tokens.subList(1, parenCorresponding[1]!! + 1),
-                tokens.subList(parenCorresponding[1]!! + 1, tokens.lastIndex)
-            )
+        val car = if (parenCorresponding[1] != null) {
+            // car部分がCell
+            tokens.subList(1, parenCorresponding[1]!! + 1)
         } else {
-            // Car部分がAtomの場合
-            Pair(
-                listOf(tokens[1]),
-                tokens.subList(2, tokens.lastIndex)
-            )
+            // car部分がAtom
+            listOf(tokens[1])
         }
 
-        return Cell(parse(car), parse(listOf(Token.LParen) + cdr + listOf(Token.RParen)))
+        // tokenのcar部分の次のtokenがDotかどうかを調べる
+        val hasDot: Boolean = tokens[1 + car.size] == Token.Dot
+        // cdr部分のIndexはDot分ずらす
+        val cdrStartIndex = 1 + car.size + if (hasDot) 1 else 0
+        val cdrTokens = tokens.subList(cdrStartIndex, tokens.lastIndex)
+        val cdr = if (hasDot) {
+            // Dotが含まれる場合は、そのままをcdrTokensとする: ( a . b c ) -> cdr: b c となりエラー
+            cdrTokens
+        } else {
+            // Dotが含まれない場合は、括弧のTokenをたす: (a b c) -> cdr: (b c)
+            listOf(Token.LParen) + cdrTokens + Token.RParen
+        }
+        return Cell(parse(car), parse(cdr))
     }
 
     fun checkParenCorresponding(tokens: List<Token>): Map<Int, Int> {

@@ -8,6 +8,10 @@ sealed interface Token {
         override fun toString(): String = "Token.RParen"
     }
 
+    object Dot : Token {
+        override fun toString(): String = "Token.Dot"
+    }
+
     object Nil : Token {
         override fun toString(): String = "Token.Nil"
     }
@@ -19,6 +23,7 @@ sealed interface Token {
         fun from(text: String) = when (text) {
             "(" -> LParen
             ")" -> RParen
+            "." -> Dot
             "nil" -> Nil
             else -> Symbol(text)
         }

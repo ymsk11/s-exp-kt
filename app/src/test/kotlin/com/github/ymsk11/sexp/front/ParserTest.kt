@@ -32,7 +32,9 @@ class ParserTest {
                     Nil
                 ),
                 Nil
-            )
+            ),
+            "(1 . 2)" to Cell(Atom("1"), Atom("2")),
+            "((1 . 2) . (3 4))" to Cell(Cell(Atom("1"), Atom("2")), Cell(Atom("3"), Cell(Atom("4"), Nil)))
         )
         testCases.forEach { (input, expect) ->
             println("TESTCASE".repeat(10))
