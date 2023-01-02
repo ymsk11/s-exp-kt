@@ -17,30 +17,38 @@ class Parser(
     }
     private fun parse(tokens: List<Token>): Sexp {
         if (tokens.isEmpty()) return Nil
-        if (tokens.size == 2 && tokens.first() == Token.LParen && tokens.last() == Token.RParen) return Nil
         if (tokens.size == 1) return parse(tokens.first())
+        if (tokens.size == 2 && tokens.first() == Token.LParen && tokens.last() == Token.RParen) return Nil
+        if (tokens.size == 2) throw IllegalArgumentException("括弧の対応がおかしい")
 
-        var nestCount = 0
-        var canRemoveParen = true
-        tokens.forEachIndexed { index, token ->
-            when (token) {
-                Token.LParen -> nestCount++
-                Token.RParen -> {
-                    nestCount--
-                    if (nestCount == 0 && index != tokens.lastIndex) {
-                        canRemoveParen = false
-                    }
-                }
-                else -> {}
+        val parenCorresponding = checkParenCorresponding(tokens)
+        if (parenCorresponding[0] != tokens.lastIndex) {
+            throw IllegalArgumentException("括弧で囲われていない")
+        }
+
+        val (car, cdr) = if (parenCorresponding.containsKey(1)) {
+            val carRParenIndex = parenCorresponding[1]!!
+            val car = tokens.subList(1, carRParenIndex + 1)
+            val cdr: List<Token> = try {
+                listOf(Token.LParen) + tokens.subList(carRParenIndex + 1, tokens.lastIndex) + listOf(Token.RParen)
+            } catch (e: IndexOutOfBoundsException) {
+                emptyList()
             }
-        }
-        val tokens = if (canRemoveParen) {
-            tokens.removeParen()
+            Pair(
+                car,
+                cdr,
+            )
         } else {
-            tokens
+            val cdr: List<Token> = try {
+                listOf(Token.LParen) + tokens.subList(2, tokens.lastIndex) + listOf(Token.RParen)
+            } catch (e: IndexOutOfBoundsException) {
+                emptyList()
+            }
+            Pair(
+                listOf(tokens[1]),
+                cdr
+            )
         }
-
-        val (car, cdr) = tokens.split()
 
         val cdrCell = if (cdr.isNotEmpty()) {
             when (val s = parse(cdr)) {
@@ -52,38 +60,6 @@ class Parser(
         }
 
         return Cell(parse(car), cdrCell)
-    }
-
-    private fun List<Token>.removeParen() = this.filterIndexed { index, token ->
-        ((index == 0 && token == Token.LParen) || (index == this.lastIndex && token == Token.RParen)).not()
-    }
-
-    private fun List<Token>.split() = if (this.first() == Token.LParen) {
-        var nestCount = 0
-        var carLastIndex = 0
-        var flag = true
-        this.forEachIndexed { index, token ->
-            when (token) {
-                Token.LParen -> nestCount++
-                Token.RParen -> {
-                    nestCount--
-                    if (nestCount == 0 && flag) {
-                        carLastIndex = index
-                        flag = false
-                    }
-                }
-                else -> {}
-            }
-        }
-        Pair(
-            this.take(carLastIndex + 1),
-            listOf(Token.LParen) + this.drop(carLastIndex + 1) + listOf(Token.RParen)
-        )
-    } else {
-        Pair(
-            listOf(this.first()),
-            this.drop(1)
-        )
     }
 
     fun checkParenCorresponding(tokens: List<Token>): Map<Int, Int> {
