@@ -1,5 +1,7 @@
 package com.github.ymsk11.sexp
 
+import kotlin.IllegalArgumentException
+
 class Parser(
     private val tokenizer: Tokenizer = Tokenizer()
 ) {
@@ -11,21 +13,37 @@ class Parser(
     private fun parse(token: Token): Sexp = when (token) {
         Token.Nil -> Nil
         is Token.Symbol -> Atom(token.value)
-        else -> Nil // TODO: throw error
+        else -> throw IllegalArgumentException()
     }
     private fun parse(tokens: List<Token>): Sexp {
-        println("TTT $tokens")
         if (tokens.isEmpty()) return Nil
         if (tokens.size == 1) {
             return parse(tokens.first())
         }
 
-        val tokens = tokens.removeParen()
+        var nestCount = 0
+        var canRemoveParen = true
+        tokens.forEachIndexed { index, token ->
+            when (token) {
+                Token.LParen -> nestCount++
+                Token.RParen -> {
+                    nestCount--
+                    if (nestCount == 0 && index != tokens.lastIndex) {
+                        canRemoveParen = false
+                    }
+                }
+                else -> {}
+            }
+        }
+        val tokens = if (canRemoveParen) {
+            tokens.removeParen()
+        } else {
+            tokens
+        }
+
+        if (tokens.isEmpty()) return Nil
 
         val (car, cdr) = tokens.split()
-
-        println("CAR $car")
-        println("CDR $cdr")
 
         val cdrCell = if (cdr.isNotEmpty()) {
             when (val s = parse(cdr)) {
@@ -46,27 +64,28 @@ class Parser(
     private fun List<Token>.split() = if (this.first() == Token.LParen) {
         var nestCount = 0
         var carLastIndex = 0
+        var flag = true
         this.forEachIndexed { index, token ->
             when (token) {
                 Token.LParen -> nestCount++
                 Token.RParen -> {
                     nestCount--
-                    if (nestCount == 0) {
+                    if (nestCount == 0 && flag) {
                         carLastIndex = index
-                        return@forEachIndexed
+                        flag = false
                     }
                 }
                 else -> {}
             }
         }
         Pair(
-            this.subList(0, carLastIndex),
-            this.subList(carLastIndex, this.lastIndex)
+            this.take(carLastIndex + 1),
+            listOf(Token.LParen) + this.drop(carLastIndex + 1) + listOf(Token.RParen)
         )
     } else {
         Pair(
             listOf(this.first()),
-            this.subList(1, this.size)
+            this.drop(1)
         )
     }
 }
