@@ -18,6 +18,8 @@ class EvaluatorTest {
             parser("(quote (1 2 3))") to Cell(Atom("1"), Cell(Atom("2"), Cell(Atom("3"), Nil))),
             parser("(car (quote (1 2)))") to Atom("1"),
             parser("(cdr (quote (1 2)))") to Cell(Atom("2"), Nil),
+            parser("(cons 1 2)") to Cell(Atom("1"), Atom("2")),
+            parser("(cons (car (quote (1 2))) (cdr (quote (1 2))))") to Cell(Atom("1"), Cell(Atom("2"), Nil))
         )
 
         testCase.forEach { input, expect ->
