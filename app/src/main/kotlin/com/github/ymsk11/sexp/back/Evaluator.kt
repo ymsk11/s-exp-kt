@@ -10,8 +10,24 @@ class Evaluator {
     }
 
     private fun eval(sexp: Sexp): Sexp {
-        if (sexp is Cell && sexp.car is Atom && sexp.car.value == "quote") {
-            return sexp.cdr
+        println("SEXP: $sexp")
+        if (sexp is Cell && sexp.car is Atom && sexp.cdr is Cell) {
+            when (sexp.car.value) {
+                "quote" -> return sexp.cdr.car
+                "car" -> {
+                    val ret = eval(sexp.cdr.car)
+                    if (ret is Cell) {
+                        return ret.car
+                    }
+                }
+                "cdr" -> {
+                    val ret = eval(sexp.cdr.car)
+
+                    if (ret is Cell) {
+                        return ret.cdr
+                    }
+                }
+            }
         }
 
         throw IllegalArgumentException("評価できません")
