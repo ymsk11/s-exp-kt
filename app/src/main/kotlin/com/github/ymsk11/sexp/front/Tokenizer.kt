@@ -23,12 +23,22 @@ class Tokenizer {
                     list += Token.Dot
                     index++
                 }
+                target[0] == '"' -> {
+                    val last = target.substring(1).indexOfFirst { it == '"' } + 1
+                    if (last < 0) {
+                        throw IllegalArgumentException("\"の個数がおかしい")
+                    }
+                    val value = target.slice(0..last)
+                    list += Token.Symbol(value)
+                    index += value.length
+                }
                 else -> {
                     val last = target.indexOfFirst {
                         it.isWhitespace() ||
                             it == '(' ||
                             it == ')' ||
-                            it == '.'
+                            it == '.' ||
+                            it == '"'
                     }
                     val value = if (last < 0) {
                         target.substring(0)
