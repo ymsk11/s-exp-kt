@@ -34,6 +34,13 @@ class Evaluator {
                         return Cell(first, second)
                     }
                 }
+                "+" -> {
+                    val first = eval(sexp.cdr.car) as Atom.IntNumber
+                    if (sexp.cdr.cdr is Cell) {
+                        val second = eval(sexp.cdr.cdr.car) as Atom.IntNumber
+                        return Atom.IntNumber(first.value + second.value)
+                    }
+                }
             }
         }
 
