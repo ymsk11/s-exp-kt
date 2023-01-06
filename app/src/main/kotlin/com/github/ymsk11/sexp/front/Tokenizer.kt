@@ -29,7 +29,7 @@ class Tokenizer {
                         throw IllegalArgumentException("\"の個数がおかしい")
                     }
                     val value = target.slice(0..last)
-                    list += Token.Symbol(value)
+                    list += Token.Str(value)
                     index += value.length
                 }
                 else -> {

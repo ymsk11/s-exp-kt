@@ -4,5 +4,9 @@ sealed interface Atom : Sexp {
     data class Symbol(val value: String) : Atom {
         override fun toString(): String = value
     }
+
+    data class Str(val value: String) : Atom {
+        override fun toString(): String = value
+    }
     object Nil : Atom
 }

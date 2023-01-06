@@ -16,6 +16,7 @@ class Parser(
     private fun parse(token: Token): Sexp = when (token) {
         Token.Nil -> Atom.Nil
         is Token.Symbol -> Atom.Symbol(token.value)
+        is Token.Str -> Atom.Str(token.value)
         else -> throw IllegalArgumentException()
     }
     private fun parse(tokens: List<Token>): Sexp {

@@ -16,6 +16,7 @@ sealed interface Token {
         override fun toString(): String = "Token.Nil"
     }
 
-    @JvmInline
-    value class Symbol(val value: String) : Token
+    data class Str(val value: String) : Token
+
+    data class Symbol(val value: String) : Token
 }

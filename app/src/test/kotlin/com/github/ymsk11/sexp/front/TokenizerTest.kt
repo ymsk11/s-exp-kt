@@ -21,11 +21,11 @@ class TokenizerTest {
             ),
             "nil" to listOf(Token.Nil),
             "(nil)" to listOf(Token.LParen, Token.Nil, Token.RParen),
-            "\"hello world\"" to listOf(Token.Symbol("\"hello world\"")),
-            "(a\"Hello, ()()World\")" to listOf(Token.LParen, Token.Symbol("a"), Token.Symbol("\"Hello, ()()World\""), Token.RParen),
+            "\"hello world\"" to listOf(Token.Str("\"hello world\"")),
+            "(a\"Hello, ()()World\")" to listOf(Token.LParen, Token.Symbol("a"), Token.Str("\"Hello, ()()World\""), Token.RParen),
             "nila" to listOf(Token.Symbol("nila")),
             "anil" to listOf(Token.Symbol("anil")),
-            "(nil\"\")" to listOf(Token.LParen, Token.Nil, Token.Symbol("\"\""), Token.RParen),
+            "(nil\"\")" to listOf(Token.LParen, Token.Nil, Token.Str("\"\""), Token.RParen),
         )
         testCases.forEach { (input, expect) ->
             assertThat(sut(input)).isEqualTo(expect)
