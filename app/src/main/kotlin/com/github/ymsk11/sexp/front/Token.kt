@@ -18,14 +18,4 @@ sealed interface Token {
 
     @JvmInline
     value class Symbol(val value: String) : Token
-
-    companion object {
-        fun from(text: String) = when (text) {
-            "(" -> LParen
-            ")" -> RParen
-            "." -> Dot
-            "nil" -> Nil
-            else -> Symbol(text)
-        }
-    }
 }
