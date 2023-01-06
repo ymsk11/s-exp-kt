@@ -2,7 +2,6 @@ package com.github.ymsk11.sexp.front
 
 import com.github.ymsk11.sexp.domain.Atom
 import com.github.ymsk11.sexp.domain.Cell
-import com.github.ymsk11.sexp.domain.Nil
 import com.google.common.truth.Truth.assertThat
 import org.junit.jupiter.api.Test
 
@@ -11,30 +10,30 @@ class ParserTest {
     @Test
     fun parseTest() {
         val testCases = mapOf(
-            "a" to Atom("a"),
-            "nil" to Nil,
-            "(1)" to Cell(Atom("1"), Nil),
-            "(1 2)" to Cell(Atom("1"), Cell(Atom("2"), Nil)),
-            "(1 2 3)" to Cell(Atom("1"), Cell(Atom("2"), Cell(Atom("3"), Nil))),
-            "((1))" to Cell(Cell(Atom("1"), Nil), Nil),
-            "(1 (2))" to Cell(Atom("1"), Cell(Cell(Atom("2"), Nil), Nil)),
-            "(1 (2) (3))" to Cell(Atom("1"), Cell(Cell(Atom("2"), Nil), Cell(Cell(Atom("3"), Nil), Nil))),
-            "(((1)) (2))" to Cell(Cell(Cell(Atom("1"), Nil), Nil), Cell(Cell(Atom("2"), Nil), Nil)),
+            "a" to Atom.Symbol("a"),
+            "nil" to Atom.Nil,
+            "(1)" to Cell(Atom.Symbol("1"), Atom.Nil),
+            "(1 2)" to Cell(Atom.Symbol("1"), Cell(Atom.Symbol("2"), Atom.Nil)),
+            "(1 2 3)" to Cell(Atom.Symbol("1"), Cell(Atom.Symbol("2"), Cell(Atom.Symbol("3"), Atom.Nil))),
+            "((1))" to Cell(Cell(Atom.Symbol("1"), Atom.Nil), Atom.Nil),
+            "(1 (2))" to Cell(Atom.Symbol("1"), Cell(Cell(Atom.Symbol("2"), Atom.Nil), Atom.Nil)),
+            "(1 (2) (3))" to Cell(Atom.Symbol("1"), Cell(Cell(Atom.Symbol("2"), Atom.Nil), Cell(Cell(Atom.Symbol("3"), Atom.Nil), Atom.Nil))),
+            "(((1)) (2))" to Cell(Cell(Cell(Atom.Symbol("1"), Atom.Nil), Atom.Nil), Cell(Cell(Atom.Symbol("2"), Atom.Nil), Atom.Nil)),
             "(((1 (2))))" to Cell(
                 Cell(
                     Cell(
-                        Atom("1"),
+                        Atom.Symbol("1"),
                         Cell(
-                            Cell(Atom("2"), Nil),
-                            Nil
+                            Cell(Atom.Symbol("2"), Atom.Nil),
+                            Atom.Nil
                         )
                     ),
-                    Nil
+                    Atom.Nil
                 ),
-                Nil
+                Atom.Nil
             ),
-            "(1 . 2)" to Cell(Atom("1"), Atom("2")),
-            "((1 . 2) . (3 4))" to Cell(Cell(Atom("1"), Atom("2")), Cell(Atom("3"), Cell(Atom("4"), Nil)))
+            "(1 . 2)" to Cell(Atom.Symbol("1"), Atom.Symbol("2")),
+            "((1 . 2) . (3 4))" to Cell(Cell(Atom.Symbol("1"), Atom.Symbol("2")), Cell(Atom.Symbol("3"), Cell(Atom.Symbol("4"), Atom.Nil)))
         )
         testCases.forEach { (input, expect) ->
             println("TESTCASE".repeat(10))

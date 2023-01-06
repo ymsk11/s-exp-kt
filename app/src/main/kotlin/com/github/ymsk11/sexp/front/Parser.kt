@@ -2,7 +2,6 @@ package com.github.ymsk11.sexp.front
 
 import com.github.ymsk11.sexp.domain.Atom
 import com.github.ymsk11.sexp.domain.Cell
-import com.github.ymsk11.sexp.domain.Nil
 import com.github.ymsk11.sexp.domain.Sexp
 import kotlin.IllegalArgumentException
 
@@ -15,14 +14,14 @@ class Parser(
     }
 
     private fun parse(token: Token): Sexp = when (token) {
-        Token.Nil -> Nil
-        is Token.Symbol -> Atom(token.value)
+        Token.Nil -> Atom.Nil
+        is Token.Symbol -> Atom.Symbol(token.value)
         else -> throw IllegalArgumentException()
     }
     private fun parse(tokens: List<Token>): Sexp {
-        if (tokens.isEmpty()) return Nil
+        if (tokens.isEmpty()) return Atom.Nil
         if (tokens.size == 1) return parse(tokens.first())
-        if (tokens.size == 2 && tokens.first() == Token.LParen && tokens.last() == Token.RParen) return Nil
+        if (tokens.size == 2 && tokens.first() == Token.LParen && tokens.last() == Token.RParen) return Atom.Nil
         if (tokens.size == 2) throw IllegalArgumentException("括弧で囲われていない")
 
         val parenCorresponding = checkParenCorresponding(tokens)

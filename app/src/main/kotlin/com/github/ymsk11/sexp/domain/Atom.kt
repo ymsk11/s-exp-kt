@@ -1,6 +1,8 @@
 package com.github.ymsk11.sexp.domain
 
-@JvmInline
-value class Atom(val value: String) : Sexp {
-    override fun toString(): String = value
+sealed interface Atom : Sexp {
+    data class Symbol(val value: String) : Atom {
+        override fun toString(): String = value
+    }
+    object Nil : Atom
 }
