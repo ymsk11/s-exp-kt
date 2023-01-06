@@ -8,5 +8,10 @@ sealed interface Atom : Sexp {
     data class Str(val value: String) : Atom {
         override fun toString(): String = value
     }
+
+    data class IntNumber(val value: Int) : Atom {
+        override fun toString(): String = "$value"
+    }
+
     object Nil : Atom
 }

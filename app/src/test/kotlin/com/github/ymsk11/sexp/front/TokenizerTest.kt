@@ -8,14 +8,14 @@ class TokenizerTest {
     @Test
     fun testCase() {
         val testCases = mapOf(
-            "1" to listOf(Token.Symbol("1")),
-            "(1)" to listOf(Token.LParen, Token.Symbol("1"), Token.RParen),
+            "1" to listOf(Token.IntNumber(1)),
+            "(1)" to listOf(Token.LParen, Token.IntNumber(1), Token.RParen),
             "(1 (2 3))" to listOf(
                 Token.LParen,
-                Token.Symbol("1"),
+                Token.IntNumber(1),
                 Token.LParen,
-                Token.Symbol("2"),
-                Token.Symbol("3"),
+                Token.IntNumber(2),
+                Token.IntNumber(3),
                 Token.RParen,
                 Token.RParen
             ),
