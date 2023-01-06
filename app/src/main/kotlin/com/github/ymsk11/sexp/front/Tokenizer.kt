@@ -32,10 +32,6 @@ class Tokenizer {
                     list += Token.Symbol(value)
                     index += value.length
                 }
-                Regex("nil*").containsMatchIn(target) -> {
-                    list += Token.Nil
-                    index += 3
-                }
                 else -> {
                     val last = target.indexOfFirst {
                         it.isWhitespace() ||
@@ -49,7 +45,10 @@ class Tokenizer {
                     } else {
                         target.substring(0, last)
                     }
-                    list += Token.Symbol(value)
+                    list += when (value) {
+                        "nil" -> Token.Nil
+                        else -> Token.Symbol(value)
+                    }
                     index += value.length
                 }
             }
