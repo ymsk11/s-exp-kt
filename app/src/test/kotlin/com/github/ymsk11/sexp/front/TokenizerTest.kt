@@ -28,6 +28,7 @@ class TokenizerTest {
             "(nil\"\")" to listOf(Token.LParen, Token.Nil, Token.Str("\"\""), Token.RParen),
             "+3" to listOf(Token.IntNumber(3)),
             "-3" to listOf(Token.IntNumber(-3)),
+            "+" to listOf(Token.Symbol("+"))
         )
         testCases.forEach { (input, expect) ->
             assertThat(sut(input)).isEqualTo(expect)
