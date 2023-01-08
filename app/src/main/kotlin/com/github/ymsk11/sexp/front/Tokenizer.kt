@@ -46,6 +46,7 @@ class Tokenizer {
                     }
                     list += when {
                         value == "nil" -> Token.Nil
+                        value == "t" -> Token.T
                         Regex("[+-]?\\d+").matches(value) -> Token.IntNumber(value = value.toInt())
                         Regex("[+-]?\\d+.\\d*").matches(value) -> Token.DoubleNumber(value = value.toDouble())
                         else -> Token.Symbol(value)

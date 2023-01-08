@@ -15,6 +15,7 @@ class Parser(
 
     private fun parse(token: Token): Sexp = when (token) {
         Token.Nil -> Atom.Nil
+        Token.T -> Atom.T
         is Token.Symbol -> Atom.Symbol(token.value)
         is Token.Str -> Atom.Str(token.value)
         is Token.IntNumber -> Atom.IntNumber(token.value)

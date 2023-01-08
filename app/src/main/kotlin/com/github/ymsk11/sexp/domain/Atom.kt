@@ -18,4 +18,6 @@ sealed interface Atom : Sexp {
     }
 
     object Nil : Atom
+
+    object T : Atom
 }

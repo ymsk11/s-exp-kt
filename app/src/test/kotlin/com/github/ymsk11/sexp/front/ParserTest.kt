@@ -35,6 +35,7 @@ class ParserTest {
             "(1 . 2)" to Cell(Atom.IntNumber(1), Atom.IntNumber(2)),
             "((1 . 2) . (3 4))" to Cell(Cell(Atom.IntNumber(1), Atom.IntNumber(2)), Cell(Atom.IntNumber(3), Cell(Atom.IntNumber(4), Atom.Nil))),
             "(2.0 . -3.0)" to Cell(Atom.DoubleNumber(2.0), Atom.DoubleNumber(-3.0)),
+            "t" to Token.T,
         )
         testCases.forEach { (input, expect) ->
             println("TESTCASE".repeat(10))

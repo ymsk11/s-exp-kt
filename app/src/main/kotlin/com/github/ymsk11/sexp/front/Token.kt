@@ -16,6 +16,10 @@ sealed interface Token {
         override fun toString(): String = "Token.Nil"
     }
 
+    object T : Token {
+        override fun toString(): String = "Token.T"
+    }
+
     data class Str(val value: String) : Token
 
     data class IntNumber(val value: Int) : Token
