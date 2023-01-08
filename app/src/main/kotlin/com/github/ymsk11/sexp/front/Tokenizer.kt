@@ -37,7 +37,6 @@ class Tokenizer {
                         it.isWhitespace() ||
                             it == '(' ||
                             it == ')' ||
-                            it == '.' ||
                             it == '"'
                     }
                     val value = if (last < 0) {
@@ -48,6 +47,7 @@ class Tokenizer {
                     list += when {
                         value == "nil" -> Token.Nil
                         Regex("[+-]?\\d+").matches(value) -> Token.IntNumber(value = value.toInt())
+                        Regex("[+-]?\\d+.\\d*").matches(value) -> Token.DoubleNumber(value = value.toDouble())
                         else -> Token.Symbol(value)
                     }
                     index += value.length

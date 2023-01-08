@@ -20,5 +20,7 @@ sealed interface Token {
 
     data class IntNumber(val value: Int) : Token
 
+    data class DoubleNumber(val value: Double) : Token
+
     data class Symbol(val value: String) : Token
 }
