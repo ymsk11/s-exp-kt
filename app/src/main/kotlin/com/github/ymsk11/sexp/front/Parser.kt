@@ -18,7 +18,10 @@ class Parser(
         is Token.Symbol -> Atom.Symbol(token.value)
         is Token.Str -> Atom.Str(token.value)
         is Token.IntNumber -> Atom.IntNumber(token.value)
-        else -> throw IllegalArgumentException()
+        is Token.DoubleNumber -> Atom.DoubleNumber(token.value)
+        else -> {
+            throw IllegalArgumentException("Tokenを変換できませんでした")
+        }
     }
     private fun parse(tokens: List<Token>): Sexp {
         if (tokens.isEmpty()) return Atom.Nil

@@ -13,5 +13,9 @@ sealed interface Atom : Sexp {
         override fun toString(): String = "$value"
     }
 
+    data class DoubleNumber(val value: Double) : Atom {
+        override fun toString(): String = "$value"
+    }
+
     object Nil : Atom
 }
