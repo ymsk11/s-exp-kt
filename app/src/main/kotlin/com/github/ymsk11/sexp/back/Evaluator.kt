@@ -53,6 +53,16 @@ class Evaluator {
                     }
                     return fold(Atom.IntNumber(0), sexp.cdr, fn)
                 }
+                "-" -> {
+                    val fn = { a: Atom, b: Atom ->
+                        if (a is Atom.IntNumber && b is Atom.IntNumber) {
+                            Atom.IntNumber(a.value - b.value)
+                        } else {
+                            throw IllegalArgumentException("error")
+                        }
+                    }
+                    return fold(sexp.cdr.car as Atom.IntNumber, sexp.cdr.cdr, fn)
+                }
             }
         }
 
