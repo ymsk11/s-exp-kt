@@ -3,13 +3,19 @@
  */
 package com.github.ymsk11.sexp
 
-class App {
-    val greeting: String
-        get() {
-            return "Hello World!"
-        }
-}
+import com.github.ymsk11.sexp.back.Evaluator
+import com.github.ymsk11.sexp.front.Parser
 
 fun main() {
-    println(App().greeting)
+    val parser = Parser()
+    val evaluator = Evaluator()
+
+    while (true) {
+        val input = readlnOrNull() ?: break
+        if (input == ":q") break
+
+        val sexp = parser(input)
+        val result = evaluator(sexp)
+        println(result)
+    }
 }

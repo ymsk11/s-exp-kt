@@ -17,7 +17,11 @@ sealed interface Atom : Sexp {
         override fun toString(): String = "$value"
     }
 
-    object Nil : Atom
+    object Nil : Atom {
+        override fun toString(): String = "nil"
+    }
 
-    object T : Atom
+    object T : Atom {
+        override fun toString(): String = "t"
+    }
 }
