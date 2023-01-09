@@ -26,7 +26,7 @@ class EvaluatorTest {
             parser("(- 100 (+ (- 10 9) (+ 2 3 4 5) (+ 6 7 (+ 8 9 10))))") to Atom.IntNumber(45),
         )
 
-        testCase.forEach { input, expect ->
+        testCase.forEach { (input, expect) ->
             assertThat(sut(input)).isEqualTo(expect)
         }
     }
