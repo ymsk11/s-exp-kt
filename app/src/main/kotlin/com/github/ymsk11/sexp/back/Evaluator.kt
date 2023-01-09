@@ -9,6 +9,15 @@ class Evaluator {
         return eval(sexp)
     }
 
+    private fun fold(accum: Atom, sexp: Sexp, fn: (Atom, Atom) -> Atom): Atom {
+        if (sexp is Atom.Nil) return accum
+        if (sexp is Cell) {
+            val next = fn(accum, eval(sexp.car) as Atom)
+            return fold(next, sexp.cdr, fn)
+        }
+        throw IllegalArgumentException("foldに失敗しました")
+    }
+
     private fun eval(sexp: Sexp): Sexp {
         if (sexp is Atom) return sexp
         if (sexp is Cell && sexp.car is Atom.Symbol && sexp.cdr is Cell) {
@@ -35,11 +44,14 @@ class Evaluator {
                     }
                 }
                 "+" -> {
-                    val first = eval(sexp.cdr.car) as Atom.IntNumber
-                    if (sexp.cdr.cdr is Cell) {
-                        val second = eval(sexp.cdr.cdr.car) as Atom.IntNumber
-                        return Atom.IntNumber(first.value + second.value)
+                    val fn = { a: Atom, b: Atom ->
+                        if (a is Atom.IntNumber && b is Atom.IntNumber) {
+                            Atom.IntNumber(a.value + b.value)
+                        } else {
+                            throw IllegalArgumentException("error")
+                        }
                     }
+                    return fold(Atom.IntNumber(0), sexp.cdr, fn)
                 }
             }
         }

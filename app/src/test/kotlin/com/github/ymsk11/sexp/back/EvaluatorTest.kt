@@ -20,7 +20,9 @@ class EvaluatorTest {
             parser("(cons 1 2)") to Cell(Atom.IntNumber(1), Atom.IntNumber(2)),
             parser("(cons (car (quote (1 2))) (cdr (quote (1 2))))") to Cell(Atom.IntNumber(1), Cell(Atom.IntNumber(2), Atom.Nil)),
             parser("(+ 1 2)") to Atom.IntNumber(3),
-            parser("(+ (+ 1 2) (+ 3 4))") to Atom.IntNumber(10)
+            parser("(+ (+ 1 2) (+ 3 4))") to Atom.IntNumber(10),
+            parser("(+ 1 2 3 4 5 6 7 8 9 10)") to Atom.IntNumber(55),
+            parser("(+ 1 (+ 2 3 4 5) (+ 6 7 (+ 8 9 10)))") to Atom.IntNumber(55),
         )
 
         testCase.forEach { input, expect ->
