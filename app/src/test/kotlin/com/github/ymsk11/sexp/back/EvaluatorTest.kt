@@ -24,6 +24,9 @@ class EvaluatorTest {
             parser("(+ 1 2 3 4 5 6 7 8 9 10)") to Atom.IntNumber(55),
             parser("(+ 1 (+ 2 3 4 5) (+ 6 7 (+ 8 9 10)))") to Atom.IntNumber(55),
             parser("(- 100 (+ (- 10 9) (+ 2 3 4 5) (+ 6 7 (+ 8 9 10))))") to Atom.IntNumber(45),
+            parser("(atom 1)") to Atom.T,
+            parser("(atom (quote (1 2)))") to Atom.Nil,
+            parser("(atom (+ 1 2 3))") to Atom.T,
         )
 
         testCase.forEach { (input, expect) ->

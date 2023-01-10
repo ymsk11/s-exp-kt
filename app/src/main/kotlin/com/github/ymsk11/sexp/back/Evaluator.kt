@@ -23,6 +23,7 @@ class Evaluator {
         if (sexp is Cell && sexp.car is Atom.Symbol && sexp.cdr is Cell) {
             when (sexp.car.value) {
                 "quote" -> return sexp.cdr.car
+                "atom" -> return if (eval(sexp.cdr.car) is Atom) Atom.T else Atom.Nil
                 "car" -> {
                     val ret = eval(sexp.cdr.car)
                     if (ret is Cell) {
