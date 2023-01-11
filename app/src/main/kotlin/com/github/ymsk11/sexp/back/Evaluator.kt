@@ -44,6 +44,14 @@ class Evaluator {
                         return Cell(first, second)
                     }
                 }
+                "equal" -> {
+                    val first = eval(sexp.cdr.car)
+                    if (sexp.cdr.cdr is Cell) {
+                        val second = eval(sexp.cdr.cdr.car)
+                        return if (first == second) Atom.T else Atom.Nil
+                    }
+                    return Atom.Nil
+                }
                 "+" -> {
                     val fn = { a: Atom, b: Atom ->
                         if (a is Atom.IntNumber && b is Atom.IntNumber) {

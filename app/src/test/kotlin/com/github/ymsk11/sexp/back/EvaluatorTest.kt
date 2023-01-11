@@ -27,6 +27,11 @@ class EvaluatorTest {
             parser("(atom 1)") to Atom.T,
             parser("(atom (quote (1 2)))") to Atom.Nil,
             parser("(atom (+ 1 2 3))") to Atom.T,
+            parser("(equal (+ 1 2) 3)") to Atom.T,
+            parser("(equal 1 3)") to Atom.Nil,
+            parser("(equal () nil)") to Atom.T,
+            parser("(equal (quote (1 2 3)) (quote (1 2 3)))") to Atom.T,
+            parser("(equal (quote (1 2 3)) (quote (1 2 (3))))") to Atom.Nil
         )
 
         testCase.forEach { (input, expect) ->
