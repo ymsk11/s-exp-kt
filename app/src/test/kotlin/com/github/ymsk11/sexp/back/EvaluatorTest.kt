@@ -35,7 +35,10 @@ class EvaluatorTest {
             parser("(if t 1 2)") to Atom.IntNumber(1),
             parser("(if nil 1 2)") to Atom.IntNumber(2),
             parser("(if \"text\" (+ 1 2) (hoge))") to Atom.IntNumber(3),
-            parser("(if nil (hoge) (+ 3 4))") to Atom.IntNumber(7)
+            parser("(if nil (hoge) (+ 3 4))") to Atom.IntNumber(7),
+            parser("(cond (nil 1) (t 2))") to Atom.IntNumber(2),
+            parser("(cond (t 1) (nil hoge))") to Atom.IntNumber(1),
+            parser("(cond (nil hoge) ((equal 1 2) fuga) ((equal 1 1) (+ 3 2)))") to Atom.IntNumber(5)
         )
 
         testCase.forEach { (input, expect) ->

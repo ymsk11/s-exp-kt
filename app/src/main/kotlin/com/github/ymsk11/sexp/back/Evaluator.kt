@@ -80,6 +80,17 @@ class Evaluator {
                     }
                     return fold(sexp.cdr.car as Atom.IntNumber, sexp.cdr.cdr, fn)
                 }
+                "cond" -> {
+                    sexp.cdr.forEach {
+                        if (it is Cell) {
+                            if (eval(it.car) != Atom.Nil) {
+                                return eval((it.cdr as Cell).car)
+                            }
+                        } else {
+                            throw IllegalArgumentException("cond statement error")
+                        }
+                    }
+                }
             }
         }
 
