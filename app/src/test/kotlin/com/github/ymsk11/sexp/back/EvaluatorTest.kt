@@ -45,6 +45,7 @@ class EvaluatorTest {
             ),
             parser("((lambda (x) (+ x x)) 2)") to Atom.IntNumber(4),
             parser("((lambda (a b) (+ (+ a b) a) ) 1 2)") to Atom.IntNumber(4),
+            parser("((lambda (a b) (+ a b)) (+ 1 2) (+ 3 4))") to Atom.IntNumber(10),
         )
 
         testCase.forEach { (input, expect) ->
