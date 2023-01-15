@@ -94,10 +94,22 @@ class Evaluator {
                 }
                 "lambda" -> {
                     return Function(
-                        args = sexp.cdr.car,
-                        fn = (sexp.cdr.cdr as Cell).car,
+                        args = sexp.cdr.car as Cell,
+                        fn = (sexp.cdr.cdr as Cell).car as Cell,
                     )
                 }
+            }
+        }
+
+        if (sexp is Cell && sexp.car is Cell && sexp.cdr is Cell) {
+            val car = eval(sexp.car)
+            if (car is Function) {
+                var fn = car.fn
+                val args = sexp.cdr.toList()
+                car.args.forEachIndexed { index, sexp ->
+                    fn = fn.replace(sexp as Atom.Symbol, eval(args.get(index)))
+                }
+                return eval(fn)
             }
         }
 

@@ -41,9 +41,10 @@ class EvaluatorTest {
             parser("(cond (t 1) (nil hoge))") to Atom.IntNumber(1),
             parser("(cond (nil hoge) ((equal 1 2) fuga) ((equal 1 1) (+ 3 2)))") to Atom.IntNumber(5),
             parser("(lambda (x) (+ x x))") to Function(
-                args = Cell(Atom.Symbol("x"), Atom.Nil),
-                fn = Cell(Atom.Symbol("+"), Cell(Atom.Symbol("x"), Cell(Atom.Symbol("x"), Atom.Nil)))
-            )
+                Cell(Atom.Symbol("x"), Atom.Nil), Cell(Atom.Symbol("+"), Cell(Atom.Symbol("x"), Cell(Atom.Symbol("x"), Atom.Nil)))
+            ),
+            parser("((lambda (x) (+ x x)) 2)") to Atom.IntNumber(4),
+            parser("((lambda (a b) (+ (+ a b) a) ) 1 2)") to Atom.IntNumber(4),
         )
 
         testCase.forEach { (input, expect) ->
