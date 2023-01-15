@@ -7,6 +7,24 @@ data class Cell(
     override fun iterator(): Iterator<Sexp> = CellIterator(this)
 
     override fun toString(): String = "( $car . $cdr )"
+
+    fun replace(target: Atom.Symbol, to: Sexp): Cell {
+        val nextCar = when (this.car) {
+            target -> to
+            is Cell -> this.car.replace(target, to)
+            else -> this.car
+        }
+        val nextCdr = when (this.cdr) {
+            target -> to
+            is Cell -> this.cdr.replace(target, to)
+            else -> this.cdr
+        }
+
+        return Cell(
+            car = nextCar,
+            cdr = nextCdr,
+        )
+    }
 }
 
 private class CellIterator(

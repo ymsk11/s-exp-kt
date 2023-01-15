@@ -28,4 +28,19 @@ class CellTest {
             assertThat(input.toList()).isEqualTo(expect)
         }
     }
+
+    @Test
+    fun replaceCell() {
+        val testCases = mapOf(
+            Cell(Atom.Symbol("x"), Atom.Symbol("y")).replace(Atom.Symbol("x"), Atom.Symbol("y"))
+                to Cell(Atom.Symbol("y"), Atom.Symbol("y")),
+            Cell(Cell(Atom.Symbol("x"), Atom.Nil), Cell(Atom.Symbol("y"), Atom.Nil)).replace(Atom.Symbol("x"), Atom.Symbol("y"))
+                to Cell(Cell(Atom.Symbol("y"), Atom.Nil), Cell(Atom.Symbol("y"), Atom.Nil)),
+            Cell(Atom.Symbol("x"), Atom.Nil).replace(Atom.Symbol("x"), Cell(Atom.Symbol("x"), Atom.Nil))
+                to Cell(Cell(Atom.Symbol("x"), Atom.Nil), Atom.Nil)
+        )
+        testCases.forEach { (input, expect) ->
+            assertThat(input).isEqualTo(expect)
+        }
+    }
 }
