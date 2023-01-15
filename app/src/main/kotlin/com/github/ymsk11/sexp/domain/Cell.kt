@@ -24,6 +24,7 @@ private class CellIterator(
                 cell = target.cdr
                 target.car
             }
+            is Function -> target // TODO
         }
     }
 }

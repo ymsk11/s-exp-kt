@@ -2,6 +2,7 @@ package com.github.ymsk11.sexp.back
 
 import com.github.ymsk11.sexp.domain.Atom
 import com.github.ymsk11.sexp.domain.Cell
+import com.github.ymsk11.sexp.domain.Function
 import com.github.ymsk11.sexp.front.Parser
 import com.google.common.truth.Truth.assertThat
 import org.junit.jupiter.api.Test
@@ -38,7 +39,11 @@ class EvaluatorTest {
             parser("(if nil (hoge) (+ 3 4))") to Atom.IntNumber(7),
             parser("(cond (nil 1) (t 2))") to Atom.IntNumber(2),
             parser("(cond (t 1) (nil hoge))") to Atom.IntNumber(1),
-            parser("(cond (nil hoge) ((equal 1 2) fuga) ((equal 1 1) (+ 3 2)))") to Atom.IntNumber(5)
+            parser("(cond (nil hoge) ((equal 1 2) fuga) ((equal 1 1) (+ 3 2)))") to Atom.IntNumber(5),
+            parser("(lambda (x) (+ x x))") to Function(
+                args = Cell(Atom.Symbol("x"), Atom.Nil),
+                fn = Cell(Atom.Symbol("+"), Cell(Atom.Symbol("x"), Cell(Atom.Symbol("x"), Atom.Nil)))
+            )
         )
 
         testCase.forEach { (input, expect) ->

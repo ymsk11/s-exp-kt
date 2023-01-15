@@ -2,6 +2,7 @@ package com.github.ymsk11.sexp.back
 
 import com.github.ymsk11.sexp.domain.Atom
 import com.github.ymsk11.sexp.domain.Cell
+import com.github.ymsk11.sexp.domain.Function
 import com.github.ymsk11.sexp.domain.Sexp
 
 class Evaluator {
@@ -90,6 +91,12 @@ class Evaluator {
                             throw IllegalArgumentException("cond statement error")
                         }
                     }
+                }
+                "lambda" -> {
+                    return Function(
+                        args = sexp.cdr.car,
+                        fn = (sexp.cdr.cdr as Cell).car,
+                    )
                 }
             }
         }
