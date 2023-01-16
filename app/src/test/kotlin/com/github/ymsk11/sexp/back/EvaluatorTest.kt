@@ -48,6 +48,11 @@ class EvaluatorTest {
             parser("((lambda (x) (+ x x)) 2)") to Atom.IntNumber(4),
             parser("((lambda (a b) (+ (+ a b) a) ) 1 2)") to Atom.IntNumber(4),
             parser("((lambda (a b) (+ a b)) (+ 1 2) (+ 3 4))") to Atom.IntNumber(10),
+            parser("((lambda (a) (cond ((equal (mod a 15) 0) \"fizzbuzz\") ((equal (mod a 3) 0) \"fizz\") ((equal (mod a 5) 0) \"buzz\") (t a))) 3 )") to Atom.Str("\"fizz\""),
+            parser("((lambda (a) (cond ((equal (mod a 15) 0) \"fizzbuzz\") ((equal (mod a 3) 0) \"fizz\") ((equal (mod a 5) 0) \"buzz\") (t a))) 5 )") to Atom.Str("\"buzz\""),
+            parser("((lambda (a) (cond ((equal (mod a 15) 0) \"fizzbuzz\") ((equal (mod a 3) 0) \"fizz\") ((equal (mod a 5) 0) \"buzz\") (t a))) 15 )") to Atom.Str("\"fizzbuzz\""),
+            parser("((lambda (a) (cond ((equal (mod a 15) 0) \"fizzbuzz\") ((equal (mod a 3) 0) \"fizz\") ((equal (mod a 5) 0) \"buzz\") (t a))) 30 )") to Atom.Str("\"fizzbuzz\""),
+            parser("((lambda (a) (cond ((equal (mod a 15) 0) \"fizzbuzz\") ((equal (mod a 3) 0) \"fizz\") ((equal (mod a 5) 0) \"buzz\") (t a))) 1 )") to Atom.IntNumber(1),
         )
 
         testCase.forEach { (input, expect) ->
