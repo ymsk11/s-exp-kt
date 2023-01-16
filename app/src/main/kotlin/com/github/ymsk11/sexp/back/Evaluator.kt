@@ -81,6 +81,11 @@ class Evaluator {
                     }
                     return fold(sexp.cdr.car as Atom.IntNumber, sexp.cdr.cdr, fn)
                 }
+                "mod" -> {
+                    val dividend = eval(sexp.cdr.car) as Atom.IntNumber
+                    val divisor = eval((sexp.cdr.cdr as Cell).car) as Atom.IntNumber
+                    return Atom.IntNumber(dividend.value.mod(divisor.value))
+                }
                 "cond" -> {
                     sexp.cdr.forEach {
                         if (it is Cell) {
