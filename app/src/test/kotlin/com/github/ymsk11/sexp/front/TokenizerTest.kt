@@ -32,7 +32,12 @@ class TokenizerTest {
             "-3.0" to listOf(Token.DoubleNumber(-3.0)),
             "+3.0" to listOf(Token.DoubleNumber(+3.0)),
             "t" to listOf(Token.T),
-            "ta" to listOf(Token.Symbol("ta"))
+            "ta" to listOf(Token.Symbol("ta")),
+            """
+                (
+                1
+                )
+            """.trimIndent() to listOf(Token.LParen, Token.IntNumber(1), Token.RParen)
         )
         testCases.forEach { (input, expect) ->
             assertThat(sut(input)).isEqualTo(expect)
