@@ -25,6 +25,7 @@ class EvaluatorTest {
             parser("(+ 1 2 3 4 5 6 7 8 9 10)") to Atom.IntNumber(55),
             parser("(+ 1 (+ 2 3 4 5) (+ 6 7 (+ 8 9 10)))") to Atom.IntNumber(55),
             parser("(- 100 (+ (- 10 9) (+ 2 3 4 5) (+ 6 7 (+ 8 9 10))))") to Atom.IntNumber(45),
+            parser("(* 11 (+ 10 1))") to Atom.IntNumber(121),
             parser("(mod 10 3)") to Atom.IntNumber(1),
             parser("(mod (+ 5 5) (+ 1 2))") to Atom.IntNumber(1),
             parser("(atom 1)") to Atom.T,
