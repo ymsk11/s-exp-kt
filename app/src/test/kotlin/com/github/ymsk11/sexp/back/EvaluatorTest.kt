@@ -3,6 +3,7 @@ package com.github.ymsk11.sexp.back
 import com.github.ymsk11.sexp.domain.Atom
 import com.github.ymsk11.sexp.domain.Cell
 import com.github.ymsk11.sexp.domain.Function
+import com.github.ymsk11.sexp.front.MultipleParser
 import com.github.ymsk11.sexp.front.Parser
 import com.google.common.truth.Truth.assertThat
 import org.junit.jupiter.api.Test
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.Test
 class EvaluatorTest {
     private val sut = Evaluator()
     private val parser = Parser()
+    private val multipleParser = MultipleParser()
 
     @Test
     fun evaluateTest() {
@@ -57,6 +59,17 @@ class EvaluatorTest {
         )
 
         testCase.forEach { (input, expect) ->
+            assertThat(sut(input)).isEqualTo(expect)
+        }
+    }
+
+    @Test
+    fun multipleEvaluateTest() {
+        val testCases = mapOf(
+            multipleParser("(+ 1 2) (+ 3 4)") to listOf(Atom.IntNumber(3), Atom.IntNumber(7))
+        )
+
+        testCases.forEach { (input, expect) ->
             assertThat(sut(input)).isEqualTo(expect)
         }
     }

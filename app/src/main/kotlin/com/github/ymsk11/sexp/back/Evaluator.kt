@@ -10,6 +10,10 @@ class Evaluator {
         return eval(sexp)
     }
 
+    operator fun invoke(xs: List<Sexp>): List<Sexp> {
+        return xs.map { eval(it) }
+    }
+
     private fun fold(accum: Atom, sexp: Sexp, fn: (Atom, Atom) -> Atom): Atom {
         if (sexp is Atom.Nil) return accum
         if (sexp is Cell) {
