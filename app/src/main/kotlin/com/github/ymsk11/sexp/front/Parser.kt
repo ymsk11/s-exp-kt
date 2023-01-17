@@ -12,6 +12,9 @@ class Parser(
         val tokens = tokenizer(text)
         return parse(tokens)
     }
+    operator fun invoke(tokens: List<Token>): Sexp {
+        return parse(tokens)
+    }
 
     private fun parse(token: Token): Sexp = when (token) {
         Token.Nil -> Atom.Nil
