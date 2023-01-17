@@ -15,4 +15,17 @@ class TokenExtTest {
             assertThat(input.checkParenCorresponding()).isEqualTo(expect)
         }
     }
+
+    @Test
+    fun splitTest() {
+        val testCases = mapOf(
+            listOf(Token.LParen, Token.RParen, Token.LParen, Token.RParen)
+                to listOf(listOf(Token.LParen, Token.RParen), listOf(Token.LParen, Token.RParen)),
+            listOf(Token.LParen, Token.LParen, Token.RParen, Token.RParen, Token.LParen, Token.RParen)
+                to listOf(listOf(Token.LParen, Token.LParen, Token.RParen, Token.RParen), listOf(Token.LParen, Token.RParen))
+        )
+        testCases.forEach { (input, expect) ->
+            assertThat(input.splitMultipleParen()).isEqualTo(expect)
+        }
+    }
 }
