@@ -30,7 +30,7 @@ class Parser(
         if (tokens.size == 2 && tokens.first() == Token.LParen && tokens.last() == Token.RParen) return Atom.Nil
         if (tokens.size == 2) throw IllegalArgumentException("括弧で囲われていない")
 
-        val parenCorresponding = checkParenCorresponding(tokens)
+        val parenCorresponding = tokens.checkParenCorresponding()
         if (parenCorresponding[0] != tokens.lastIndex) {
             throw IllegalArgumentException("括弧で囲われていない")
         }
@@ -56,21 +56,5 @@ class Parser(
             listOf(Token.LParen) + cdrTokens + Token.RParen
         }
         return Cell(parse(car), parse(cdr))
-    }
-
-    fun checkParenCorresponding(tokens: List<Token>): Map<Int, Int> {
-        val list = mutableListOf<Int>()
-        val ret = mutableMapOf<Int, Int>()
-        tokens.forEachIndexed { index, token ->
-            when (token) {
-                Token.LParen -> list.add(index)
-                Token.RParen -> {
-                    ret[list.last()] = index
-                    list.removeAt(list.lastIndex)
-                }
-                else -> {}
-            }
-        }
-        return ret
     }
 }
