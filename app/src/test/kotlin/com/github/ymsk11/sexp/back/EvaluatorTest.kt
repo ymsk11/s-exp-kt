@@ -88,6 +88,22 @@ class EvaluatorTest {
                 Atom.Str("\"fizz\""),
                 Atom.Str("\"fizzbuzz\""),
                 Atom.IntNumber(31)
+            ),
+            multipleParser(
+                """
+                (define fib (lambda (x) 
+                    (cond 
+                        ((equal x 0) 0) 
+                        ((equal x 1) 1) 
+                        (t (+ (fib (- x 1)) (fib (- x 2)))))))
+                
+                (fib 10)
+                (fib 11)
+                """.trimIndent()
+            ) to listOf(
+                Atom.T,
+                Atom.IntNumber(55),
+                Atom.IntNumber(89),
             )
         )
 
