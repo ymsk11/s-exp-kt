@@ -13,11 +13,30 @@ class Operators(
     private val parentEval: (Sexp) -> Sexp,
 ) {
     private val registered = mapOf(
+        "quote" to Quote,
+        "define" to Define(parentEval, setEnvironment),
         "+" to Addition(parentEval),
         "*" to Multiplication(parentEval),
         "-" to Subtraction(parentEval)
     )
     fun find(key: String): Operator? = registered[key]
+}
+
+object Quote : Operator {
+    override fun eval(args: Sexp): Sexp = (args as Cell).car
+}
+
+class Define(
+    val parentEval: (Sexp) -> Sexp,
+    val setEnvironment: (Atom.Symbol, Sexp) -> Unit,
+) : Operator {
+    override fun eval(args: Sexp): Sexp {
+        val symbol = (args as Cell).car as Atom.Symbol
+        val value = parentEval((args.cdr as Cell).car)
+        setEnvironment(symbol, value)
+        // FIXME: valueを返した方が良い気がするが、テストでここをちゃんと検証するのも面倒なため。。
+        return Atom.T
+    }
 }
 
 class Addition(

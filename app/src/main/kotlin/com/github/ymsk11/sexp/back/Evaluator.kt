@@ -30,7 +30,6 @@ class Evaluator {
                 return it
             }
             when (sexp.car.value) {
-                "quote" -> return sexp.cdr.car
                 "atom" -> return if (eval(sexp.cdr.car) is Atom) Atom.T else Atom.Nil
                 "car" -> {
                     val ret = eval(sexp.cdr.car)
@@ -89,13 +88,6 @@ class Evaluator {
                         args = sexp.cdr.car as Cell,
                         fn = (sexp.cdr.cdr as Cell).car as Cell,
                     )
-                }
-                "define" -> {
-                    val symbol = sexp.cdr.car as Atom.Symbol
-                    val value = (sexp.cdr.cdr as Cell).car
-                    environment[symbol] = eval(value)
-                    // FIXME: valueを返した方が良い気がするが、テストでここをちゃんと検証するのも面倒なため。。
-                    return Atom.T
                 }
                 else -> {
                     val f = environment[sexp.car]
