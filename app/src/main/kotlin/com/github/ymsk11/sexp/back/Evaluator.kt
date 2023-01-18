@@ -8,9 +8,11 @@ import com.github.ymsk11.sexp.domain.Sexp
 class Evaluator {
     // TODO: 現状、defineはグローバルに定義されるので、スコープをどうするか検討
     private val environment = mutableMapOf<Atom.Symbol, Sexp>()
-    private val setEnvironment: (Atom.Symbol, Sexp) -> Unit = { symbol, sexp ->
-        environment[symbol] = sexp
-    }
+
+    private val operators = Operators(
+        setEnvironment = { symbol, sexp -> environment[symbol] = sexp },
+        parentEval = { eval(it) }
+    )
 
     operator fun invoke(sexp: Sexp): Sexp {
         return eval(sexp)
@@ -24,6 +26,9 @@ class Evaluator {
         if (sexp is Atom.Symbol) return environment[sexp]!!
         if (sexp is Atom) return sexp
         if (sexp is Cell && sexp.car is Atom.Symbol && sexp.cdr is Cell) {
+            operators.find(sexp.car.value)?.eval(sexp.cdr)?.let {
+                return it
+            }
             when (sexp.car.value) {
                 "quote" -> return sexp.cdr.car
                 "atom" -> return if (eval(sexp.cdr.car) is Atom) Atom.T else Atom.Nil
@@ -63,9 +68,6 @@ class Evaluator {
                         eval((sexp.cdr.cdr as Cell).car)
                     }
                 }
-                "+" -> return Addition().eval(sexp.cdr, setEnvironment, eval = { eval(it) })
-                "*" -> return Multiplication().eval(sexp.cdr, setEnvironment, eval = { eval(it) })
-                "-" -> return Subtraction().eval(sexp.cdr, setEnvironment, eval = { eval(it) })
                 "mod" -> {
                     val dividend = eval(sexp.cdr.car) as Atom.IntNumber
                     val divisor = eval((sexp.cdr.cdr as Cell).car) as Atom.IntNumber
