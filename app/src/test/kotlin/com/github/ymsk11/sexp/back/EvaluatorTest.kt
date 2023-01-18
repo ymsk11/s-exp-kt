@@ -66,7 +66,9 @@ class EvaluatorTest {
     @Test
     fun multipleEvaluateTest() {
         val testCases = mapOf(
-            multipleParser("(+ 1 2) (+ 3 4)") to listOf(Atom.IntNumber(3), Atom.IntNumber(7))
+            multipleParser("(+ 1 2) (+ 3 4)") to listOf(Atom.IntNumber(3), Atom.IntNumber(7)),
+            // FIXME: defineの成功時の戻り値は検証したくないため、仕様としてAtom.Tを返すようにしてしまっている
+            multipleParser("(define x (* 11 11)) x") to listOf(Atom.T, Atom.IntNumber(121)),
         )
 
         testCases.forEach { (input, expect) ->

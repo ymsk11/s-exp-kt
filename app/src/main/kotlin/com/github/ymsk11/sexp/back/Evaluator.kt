@@ -6,6 +6,9 @@ import com.github.ymsk11.sexp.domain.Function
 import com.github.ymsk11.sexp.domain.Sexp
 
 class Evaluator {
+    // TODO: 現状、defineはグローバルに定義されるので、スコープをどうするか検討
+    private val environment = mutableMapOf<Atom.Symbol, Sexp>()
+
     operator fun invoke(sexp: Sexp): Sexp {
         return eval(sexp)
     }
@@ -24,6 +27,7 @@ class Evaluator {
     }
 
     private fun eval(sexp: Sexp): Sexp {
+        if (sexp is Atom.Symbol) return environment[sexp]!!
         if (sexp is Atom) return sexp
         if (sexp is Cell && sexp.car is Atom.Symbol && sexp.cdr is Cell) {
             when (sexp.car.value) {
@@ -117,6 +121,13 @@ class Evaluator {
                         fn = (sexp.cdr.cdr as Cell).car as Cell,
                     )
                 }
+                "define" -> {
+                    val symbol = sexp.cdr.car as Atom.Symbol
+                    val value = (sexp.cdr.cdr as Cell).car
+                    environment[symbol] = eval(value)
+                    // FIXME: valueを返した方が良い気がするが、テストでここをちゃんと検証するのも面倒なため。。
+                    return Atom.T
+                }
             }
         }
 
@@ -132,6 +143,6 @@ class Evaluator {
             }
         }
 
-        throw IllegalArgumentException("評価できません")
+        throw IllegalArgumentException("評価できません $sexp")
     }
 }
