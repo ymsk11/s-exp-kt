@@ -56,6 +56,8 @@ class EvaluatorTest {
             parser("((lambda (a) (cond ((equal (mod a 15) 0) \"fizzbuzz\") ((equal (mod a 3) 0) \"fizz\") ((equal (mod a 5) 0) \"buzz\") (t a))) 15 )") to Atom.Str("\"fizzbuzz\""),
             parser("((lambda (a) (cond ((equal (mod a 15) 0) \"fizzbuzz\") ((equal (mod a 3) 0) \"fizz\") ((equal (mod a 5) 0) \"buzz\") (t a))) 30 )") to Atom.Str("\"fizzbuzz\""),
             parser("((lambda (a) (cond ((equal (mod a 15) 0) \"fizzbuzz\") ((equal (mod a 3) 0) \"fizz\") ((equal (mod a 5) 0) \"buzz\") (t a))) 1 )") to Atom.IntNumber(1),
+            parser("(define x 10)") to Atom.IntNumber(10),
+            parser("(define x (+ 10 10))") to Atom.IntNumber(20),
         )
 
         testCase.forEach { (input, expect) ->
@@ -69,6 +71,26 @@ class EvaluatorTest {
             multipleParser("(+ 1 2) (+ 3 4)") to listOf(Atom.IntNumber(3), Atom.IntNumber(7)),
             // FIXME: defineの成功時の戻り値は検証したくないため、仕様としてAtom.Tを返すようにしてしまっている
             multipleParser("(define x (* 11 11)) x") to listOf(Atom.T, Atom.IntNumber(121)),
+            multipleParser(
+                """
+                (define fizzbuzz (lambda (a)
+                    (cond
+                         ((equal (mod a 15) 0) "fizzbuzz")
+                         ((equal (mod a 3 ) 0) "fizz")
+                         ((equal (mod a 5 ) 0) "buzz")
+                         (t a))))
+                (fizzbuzz 10)
+                (fizzbuzz 6)
+                (fizzbuzz 30)
+                (fizzbuzz 31)
+                """.trimIndent()
+            ) to listOf(
+                Atom.T,
+                Atom.Str("\"buzz\""),
+                Atom.Str("\"fizz\""),
+                Atom.Str("\"fizzbuzz\""),
+                Atom.IntNumber(31)
+            )
         )
 
         testCases.forEach { (input, expect) ->

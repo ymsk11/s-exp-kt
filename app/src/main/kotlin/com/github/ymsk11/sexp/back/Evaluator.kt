@@ -128,21 +128,29 @@ class Evaluator {
                     // FIXME: valueを返した方が良い気がするが、テストでここをちゃんと検証するのも面倒なため。。
                     return Atom.T
                 }
+                else -> {
+                    val f = environment[sexp.car]
+                    if (f is Function) {
+                        return evalFunction(f, sexp.cdr)
+                    }
+                }
             }
         }
 
         if (sexp is Cell && sexp.car is Cell && sexp.cdr is Cell) {
             val car = eval(sexp.car)
-            if (car is Function) {
-                var fn = car.fn
-                val args = sexp.cdr.toList()
-                car.args.forEachIndexed { index, sexp ->
-                    fn = fn.replace(sexp as Atom.Symbol, eval(args.get(index)))
-                }
-                return eval(fn)
-            }
+            return evalFunction(car as Function, sexp.cdr)
         }
 
         throw IllegalArgumentException("評価できません $sexp")
+    }
+
+    private fun evalFunction(f: Function, args: Cell): Sexp {
+        var fn = f.fn
+        val args = args.toList()
+        f.args.forEachIndexed { index, sexp ->
+            fn = fn.replace(sexp as Atom.Symbol, eval(args.get(index)))
+        }
+        return eval(fn)
     }
 }
