@@ -8,6 +8,9 @@ import com.github.ymsk11.sexp.domain.Sexp
 class Evaluator {
     // TODO: 現状、defineはグローバルに定義されるので、スコープをどうするか検討
     private val environment = mutableMapOf<Atom.Symbol, Sexp>()
+    private val setEnvironment: (Atom.Symbol, Sexp) -> Unit = { symbol, sexp ->
+        environment[symbol] = sexp
+    }
 
     operator fun invoke(sexp: Sexp): Sexp {
         return eval(sexp)
@@ -15,15 +18,6 @@ class Evaluator {
 
     operator fun invoke(xs: List<Sexp>): List<Sexp> {
         return xs.map { eval(it) }
-    }
-
-    private fun fold(accum: Atom, sexp: Sexp, fn: (Atom, Atom) -> Atom): Atom {
-        if (sexp is Atom.Nil) return accum
-        if (sexp is Cell) {
-            val next = fn(accum, eval(sexp.car) as Atom)
-            return fold(next, sexp.cdr, fn)
-        }
-        throw IllegalArgumentException("foldに失敗しました")
     }
 
     private fun eval(sexp: Sexp): Sexp {
@@ -69,36 +63,9 @@ class Evaluator {
                         eval((sexp.cdr.cdr as Cell).car)
                     }
                 }
-                "+" -> {
-                    val fn = { a: Atom, b: Atom ->
-                        if (a is Atom.IntNumber && b is Atom.IntNumber) {
-                            Atom.IntNumber(a.value + b.value)
-                        } else {
-                            throw IllegalArgumentException("error")
-                        }
-                    }
-                    return fold(Atom.IntNumber(0), sexp.cdr, fn)
-                }
-                "*" -> {
-                    val fn = { a: Atom, b: Atom ->
-                        if (a is Atom.IntNumber && b is Atom.IntNumber) {
-                            Atom.IntNumber(a.value * b.value)
-                        } else {
-                            throw IllegalArgumentException("error")
-                        }
-                    }
-                    return fold(Atom.IntNumber(1), sexp.cdr, fn)
-                }
-                "-" -> {
-                    val fn = { a: Atom, b: Atom ->
-                        if (a is Atom.IntNumber && b is Atom.IntNumber) {
-                            Atom.IntNumber(a.value - b.value)
-                        } else {
-                            throw IllegalArgumentException("error")
-                        }
-                    }
-                    return fold(sexp.cdr.car as Atom.IntNumber, sexp.cdr.cdr, fn)
-                }
+                "+" -> return Addition().eval(sexp.cdr, setEnvironment, eval = { eval(it) })
+                "*" -> return Multiplication().eval(sexp.cdr, setEnvironment, eval = { eval(it) })
+                "-" -> return Subtraction().eval(sexp.cdr, setEnvironment, eval = { eval(it) })
                 "mod" -> {
                     val dividend = eval(sexp.cdr.car) as Atom.IntNumber
                     val divisor = eval((sexp.cdr.cdr as Cell).car) as Atom.IntNumber
