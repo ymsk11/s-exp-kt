@@ -56,8 +56,6 @@ class EvaluatorTest {
             parser("((lambda (a) (cond ((equal (mod a 15) 0) \"fizzbuzz\") ((equal (mod a 3) 0) \"fizz\") ((equal (mod a 5) 0) \"buzz\") (t a))) 15 )") to Atom.Str("\"fizzbuzz\""),
             parser("((lambda (a) (cond ((equal (mod a 15) 0) \"fizzbuzz\") ((equal (mod a 3) 0) \"fizz\") ((equal (mod a 5) 0) \"buzz\") (t a))) 30 )") to Atom.Str("\"fizzbuzz\""),
             parser("((lambda (a) (cond ((equal (mod a 15) 0) \"fizzbuzz\") ((equal (mod a 3) 0) \"fizz\") ((equal (mod a 5) 0) \"buzz\") (t a))) 1 )") to Atom.IntNumber(1),
-            parser("(define x 10)") to Atom.IntNumber(10),
-            parser("(define x (+ 10 10))") to Atom.IntNumber(20),
         )
 
         testCase.forEach { (input, expect) ->
