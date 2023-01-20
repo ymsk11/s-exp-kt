@@ -11,6 +11,5 @@ class Addition(
         return args.fold(Atom.IntNumber(0)) { acc, sexp ->
             Atom.IntNumber(acc.value + (parentEval(sexp) as Atom.IntNumber).value)
         }
-        throw IllegalArgumentException("引数がおかしい")
     }
 }
