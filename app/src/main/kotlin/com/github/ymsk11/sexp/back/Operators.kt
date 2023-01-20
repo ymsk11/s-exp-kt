@@ -9,6 +9,7 @@ class Operators(
 ) {
     private val registered = mapOf(
         "car" to Car(parentEval),
+        "cdr" to Cdr(parentEval),
         "atom" to IsAtom(parentEval),
         "quote" to Quote,
         "define" to Define(parentEval, setEnvironment),
