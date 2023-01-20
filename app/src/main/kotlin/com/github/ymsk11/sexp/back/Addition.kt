@@ -7,11 +7,9 @@ import com.github.ymsk11.sexp.domain.Sexp
 class Addition(
     val parentEval: (Sexp) -> Sexp
 ) : Operator {
-    override fun eval(args: Sexp): Sexp {
-        if (args is Cell) {
-            return args.fold(Atom.IntNumber(0)) { acc, sexp ->
-                Atom.IntNumber(acc.value + (parentEval(sexp) as Atom.IntNumber).value)
-            }
+    override fun eval(args: Cell): Sexp {
+        return args.fold(Atom.IntNumber(0)) { acc, sexp ->
+            Atom.IntNumber(acc.value + (parentEval(sexp) as Atom.IntNumber).value)
         }
         throw IllegalArgumentException("引数がおかしい")
     }

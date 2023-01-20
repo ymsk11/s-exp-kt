@@ -6,8 +6,8 @@ import com.github.ymsk11.sexp.domain.Sexp
 class Car(
     val parentEval: (Sexp) -> Sexp
 ) : Operator {
-    override fun eval(args: Sexp): Sexp {
-        val ret = parentEval((args as Cell).car)
+    override fun eval(args: Cell): Sexp {
+        val ret = parentEval(args.car)
         return (ret as Cell).car
     }
 }

@@ -7,7 +7,7 @@ import com.github.ymsk11.sexp.domain.Sexp
 class IsAtom(
     val parentEval: (Sexp) -> Sexp
 ) : Operator {
-    override fun eval(args: Sexp): Sexp {
-        return if (parentEval((args as Cell).car) is Atom) Atom.T else Atom.Nil
+    override fun eval(args: Cell): Sexp {
+        return if (parentEval(args.car) is Atom) Atom.T else Atom.Nil
     }
 }

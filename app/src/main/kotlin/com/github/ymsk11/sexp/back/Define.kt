@@ -8,8 +8,8 @@ class Define(
     val parentEval: (Sexp) -> Sexp,
     val setEnvironment: (Atom.Symbol, Sexp) -> Unit,
 ) : Operator {
-    override fun eval(args: Sexp): Sexp {
-        val symbol = (args as Cell).car as Atom.Symbol
+    override fun eval(args: Cell): Sexp {
+        val symbol = args.car as Atom.Symbol
         val value = parentEval((args.cdr as Cell).car)
         setEnvironment(symbol, value)
         // FIXME: valueを返した方が良い気がするが、テストでここをちゃんと検証するのも面倒なため。。
