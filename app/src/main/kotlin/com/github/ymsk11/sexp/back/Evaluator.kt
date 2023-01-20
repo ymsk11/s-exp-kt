@@ -30,12 +30,6 @@ class Evaluator {
                 return it
             }
             when (sexp.car.value) {
-                "car" -> {
-                    val ret = eval(sexp.cdr.car)
-                    if (ret is Cell) {
-                        return ret.car
-                    }
-                }
                 "cdr" -> {
                     val ret = eval(sexp.cdr.car)
 

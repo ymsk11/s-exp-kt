@@ -8,6 +8,7 @@ class Operators(
     private val parentEval: (Sexp) -> Sexp,
 ) {
     private val registered = mapOf(
+        "car" to Car(parentEval),
         "atom" to IsAtom(parentEval),
         "quote" to Quote,
         "define" to Define(parentEval, setEnvironment),
