@@ -11,6 +11,7 @@ class Operators(
         "car" to Car(parentEval),
         "cdr" to Cdr(parentEval),
         "atom" to IsAtom(parentEval),
+        "equal" to Equal(parentEval),
         "cons" to Cons(parentEval),
         "quote" to Quote,
         "define" to Define(parentEval, setEnvironment),

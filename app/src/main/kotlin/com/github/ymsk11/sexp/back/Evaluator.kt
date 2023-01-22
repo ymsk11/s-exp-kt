@@ -30,14 +30,6 @@ class Evaluator {
                 return it
             }
             when (sexp.car.value) {
-                "equal" -> {
-                    val first = eval(sexp.cdr.car)
-                    if (sexp.cdr.cdr is Cell) {
-                        val second = eval(sexp.cdr.cdr.car)
-                        return if (first == second) Atom.T else Atom.Nil
-                    }
-                    return Atom.Nil
-                }
                 "if" -> {
                     val condition = eval(sexp.cdr.car)
                     return if (condition == Atom.Nil) {
