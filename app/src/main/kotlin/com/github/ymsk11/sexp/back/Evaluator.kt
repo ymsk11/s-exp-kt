@@ -30,14 +30,6 @@ class Evaluator {
                 return it
             }
             when (sexp.car.value) {
-                "if" -> {
-                    val condition = eval(sexp.cdr.car)
-                    return if (condition == Atom.Nil) {
-                        eval(((sexp.cdr.cdr as Cell).cdr as Cell).car)
-                    } else {
-                        eval((sexp.cdr.cdr as Cell).car)
-                    }
-                }
                 "mod" -> {
                     val dividend = eval(sexp.cdr.car) as Atom.IntNumber
                     val divisor = eval((sexp.cdr.cdr as Cell).car) as Atom.IntNumber
