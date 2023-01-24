@@ -30,11 +30,6 @@ class Evaluator {
                 return it
             }
             when (sexp.car.value) {
-                "mod" -> {
-                    val dividend = eval(sexp.cdr.car) as Atom.IntNumber
-                    val divisor = eval((sexp.cdr.cdr as Cell).car) as Atom.IntNumber
-                    return Atom.IntNumber(dividend.value.mod(divisor.value))
-                }
                 "cond" -> {
                     sexp.cdr.forEach {
                         if (it is Cell) {

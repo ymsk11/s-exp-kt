@@ -18,7 +18,8 @@ class Operators(
         "define" to Define(parentEval, setEnvironment),
         "+" to Addition(parentEval),
         "*" to Multiplication(parentEval),
-        "-" to Subtraction(parentEval)
+        "-" to Subtraction(parentEval),
+        "mod" to Mod(parentEval)
     )
     fun find(key: String): Operator? = registered[key]
 }
