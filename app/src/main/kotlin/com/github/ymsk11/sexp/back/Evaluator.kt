@@ -30,17 +30,6 @@ class Evaluator {
                 return it
             }
             when (sexp.car.value) {
-                "cond" -> {
-                    sexp.cdr.forEach {
-                        if (it is Cell) {
-                            if (eval(it.car) != Atom.Nil) {
-                                return eval((it.cdr as Cell).car)
-                            }
-                        } else {
-                            throw IllegalArgumentException("cond statement error")
-                        }
-                    }
-                }
                 "lambda" -> {
                     return Function(
                         args = sexp.cdr.car as Cell,

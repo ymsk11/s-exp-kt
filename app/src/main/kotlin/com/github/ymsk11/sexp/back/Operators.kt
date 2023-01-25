@@ -15,6 +15,7 @@ class Operators(
         "cons" to Cons(parentEval),
         "quote" to Quote,
         "if" to If(parentEval),
+        "cond" to Cond(parentEval),
         "define" to Define(parentEval, setEnvironment),
         "+" to Addition(parentEval),
         "*" to Multiplication(parentEval),
