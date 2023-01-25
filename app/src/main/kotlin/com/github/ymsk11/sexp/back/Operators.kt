@@ -16,6 +16,7 @@ class Operators(
         "quote" to Quote,
         "if" to If(parentEval),
         "cond" to Cond(parentEval),
+        "lambda" to Lambda,
         "define" to Define(parentEval, setEnvironment),
         "+" to Addition(parentEval),
         "*" to Multiplication(parentEval),

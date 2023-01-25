@@ -29,19 +29,9 @@ class Evaluator {
             operators.find(sexp.car.value)?.eval(sexp.cdr)?.let {
                 return it
             }
-            when (sexp.car.value) {
-                "lambda" -> {
-                    return Function(
-                        args = sexp.cdr.car as Cell,
-                        fn = (sexp.cdr.cdr as Cell).car as Cell,
-                    )
-                }
-                else -> {
-                    val f = environment[sexp.car]
-                    if (f is Function) {
-                        return evalFunction(f, sexp.cdr)
-                    }
-                }
+            val f = environment[sexp.car]
+            if (f is Function) {
+                return evalFunction(f, sexp.cdr)
             }
         }
 
