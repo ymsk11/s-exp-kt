@@ -13,6 +13,7 @@ import com.github.ymsk11.sexp.back.operator.Lambda
 import com.github.ymsk11.sexp.back.operator.Mod
 import com.github.ymsk11.sexp.back.operator.Multiplication
 import com.github.ymsk11.sexp.back.operator.Operator
+import com.github.ymsk11.sexp.back.operator.Progn
 import com.github.ymsk11.sexp.back.operator.Quote
 import com.github.ymsk11.sexp.back.operator.Subtraction
 import com.github.ymsk11.sexp.domain.Atom
@@ -33,6 +34,7 @@ class Operators(
         "cond" to Cond(parentEval),
         "lambda" to Lambda,
         "define" to Define(parentEval, setEnvironment),
+        "progn" to Progn(parentEval),
         "+" to Addition(parentEval),
         "*" to Multiplication(parentEval),
         "-" to Subtraction(parentEval),
